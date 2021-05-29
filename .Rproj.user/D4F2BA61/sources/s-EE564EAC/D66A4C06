@@ -1,0 +1,24 @@
+{
+    "id": "D66A4C06",
+    "path": "~/Dropbox/PhD/AusCOVID/R/analyse_topics_clean.R",
+    "project_path": "R/analyse_topics_clean.R",
+    "type": "r_source",
+    "hash": "2543975662",
+    "contents": "",
+    "dirty": false,
+    "created": 1622293736260.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "cursorPosition": "19,0",
+        "scrollLine": "21"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1622294769,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1622294769305,
+    "read_only": false,
+    "read_only_alternatives": []
+}

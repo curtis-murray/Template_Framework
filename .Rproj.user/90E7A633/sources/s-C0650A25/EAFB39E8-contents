@@ -1,0 +1,88 @@
+library(tidyverse)
+library(DT)
+library(reactable)
+library(highcharter)
+library(htmlwidgets)
+#regex_num <- "(?:\\S+\\s){2}?\\S([^[0-9]][1-9][0-9][^[0-9]])\\S(?:\\s\\S+){2}?"
+
+
+# Regular expressions to match age
+regex_age1 <- "((?i)((age(d*))|(age of )|(m((ale|an))*)|(((I('*|’)(m*))|(he|they|dad|brother|uncle|grandpa|(grand)*father(\\s*('*|’)(i*)))(( am)|( was)|( will be)|( is)|( are)))))\\s*([1-9][0-9]))"
+regex_age2 <- "(([1-9][0-9])\\s*((?i)(y(\\s|r|/*\\s*o|(ears* (old)|(young))))|(m((ale|an))*)\\s))"
+regex_age3 <- "(\\((?i)m*[1-9][0-9]\\s*(('*’*s*)|(yr*(ears)*(\\s*o*(ld)*))*|(m*))(\\)|,))"
+
+
+# Merge together to consider all
+regex_age <- paste(regex_age1, regex_age2, regex_age3, sep = "|")
+
+str_extract("blah 20 years old blah", regex_age)
+
+# Add ages to prostate data with string that found it (note duplicate posts for duplicate ages)
+aged_data <- read_csv("data/Prostate/Scrape/ProstateCancer.csv") %>% 
+	filter(!is.na(Content)) %>% 
+	mutate(Age = str_extract_all(Content, regex_age)) %>% 
+	select(Content, Age) %>% 
+	mutate(ID = 1:n()) %>% 
+	unnest(cols = c("Age"), keep_empty = TRUE) %>% 
+	mutate(Age_string = Age, 
+				 Age = str_extract(Age, "[1-9][0-9]")) %>% 
+	mutate(Age = as.numeric(Age))
+
+
+aged_data %>% 
+	arrange(Age) %>% 
+	datatable()
+
+aged_data %>% datatable()
+
+write_csv(aged_data, path = "data/aged_data.csv")
+
+aged_data_summary <- aged_data %>% 
+	mutate(Age_string = str_replace(Age_string, "[1-9][0-9]", "[age]")) %>% 
+	group_by(Age_string) %>% 
+	summarise(count = n()) %>% 
+	arrange(-count) 
+
+aged_data_summary %>% datatable()
+
+aged_data_summary %>%
+	write_csv("data/aged_data_string.csv")
+
+p <- aged_data %>% 
+	drop_na() %>% 
+	mutate(Age = floor(Age*0.1)*10) %>% 
+	group_by(Age) %>% 
+	summarise(count = n()) %>% 
+	mutate(freq = count/sum(count)) %>% 
+	mutate(Age_str = paste(Age, "-", Age+9, sep = "")) %>% 
+	ggplot() + 
+	geom_bar(aes(Age_str, freq), stat="identity") + 
+	labs(y = "Proportion of posts", x = "Ages in post") + 
+	theme_minimal() 
+
+ggsave(plot = p, filename = "Figures/Plots/Prostate/ages.pdf", device = 'pdf', width = 6, height = 4)
+
+hc <- aged_data %>% 
+	drop_na() %>% 
+	mutate(Age = floor(Age*0.1)*10) %>% 
+	group_by(Age) %>% 
+	summarise(count = n()) %>% 
+	mutate(freq = count/sum(count)) %>% 
+	mutate(Age_str = paste(Age, "-", Age+9, sep = "")) %>% 
+	mutate(freq_round = round(freq, 3)) %>% 
+	hchart(., "column",
+				 hcaes(x = Age_str, 
+				 			y = freq
+				 )
+	)%>% 
+	hc_yAxis(opposite = FALSE,
+					 labels = list(format = "{value}"),
+					 title = list(text = "Proportion of posts")) %>% 
+	hc_xAxis(opposite = FALSE,
+					 labels = list(format = '{value}'),
+					 title = list(text = "Age in post")) %>% 
+	hc_tooltip(pointFormat = 'Proportion: {point.freq_round} <br/> Occurances: {point.count} <br/>') %>% 
+	hc_title(text = "/r/ProstateCancer ages in posts")
+
+path<-"Figures/Plots/Prostate/ages.html"
+saveWidget(hc,file.path(normalizePath(dirname(path)),basename(path)))

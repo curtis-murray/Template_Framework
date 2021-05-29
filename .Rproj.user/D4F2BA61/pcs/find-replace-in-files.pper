@@ -1,0 +1,28 @@
+{
+    "dialog-state": {
+        "query": "sentiment",
+        "path": "~/Dropbox/PhD",
+        "regex": false,
+        "caseSensitive": false,
+        "filePatterns": [
+            "*.r",
+            "*.R",
+            "*.rnw",
+            "*.Rnw",
+            "*.rmd",
+            "*.Rmd",
+            "*.rmarkdown",
+            "*.Rmarkdown",
+            "*.rhtml",
+            "*.Rhtml",
+            "*.h",
+            "*.hpp",
+            "*.c",
+            "*.cpp"
+        ],
+        "excludeFilePatterns": [],
+        "resultsCount": 215,
+        "errorCount": 0,
+        "replaceErrors": ""
+    }
+}

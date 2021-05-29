@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<style>body{background-color:white;}</style>
+<script src="lib/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<script src="lib/jquery-3.5.0/jquery.min.js"></script>
+<script src="lib/proj4js-2.3.15/proj4.js"></script>
+<link href="lib/highcharts-8.1.2/css/motion.css" rel="stylesheet" />
+<script src="lib/highcharts-8.1.2/highcharts.js"></script>
+<script src="lib/highcharts-8.1.2/highcharts-3d.js"></script>
+<script src="lib/highcharts-8.1.2/highcharts-more.js"></script>
+<script src="lib/highcharts-8.1.2/modules/stock.js"></script>
+<script src="lib/highcharts-8.1.2/modules/map.js"></script>
+<script src="lib/highcharts-8.1.2/modules/annotations.js"></script>
+<script src="lib/highcharts-8.1.2/modules/data.js"></script>
+<script src="lib/highcharts-8.1.2/modules/drilldown.js"></script>
+<script src="lib/highcharts-8.1.2/modules/item-series.js"></script>
+<script src="lib/highcharts-8.1.2/modules/offline-exporting.js"></script>
+<script src="lib/highcharts-8.1.2/modules/overlapping-datalabels.js"></script>
+<script src="lib/highcharts-8.1.2/modules/exporting.js"></script>
+<script src="lib/highcharts-8.1.2/modules/export-data.js"></script>
+<script src="lib/highcharts-8.1.2/modules/funnel.js"></script>
+<script src="lib/highcharts-8.1.2/modules/heatmap.js"></script>
+<script src="lib/highcharts-8.1.2/modules/treemap.js"></script>
+<script src="lib/highcharts-8.1.2/modules/sankey.js"></script>
+<script src="lib/highcharts-8.1.2/modules/dependency-wheel.js"></script>
+<script src="lib/highcharts-8.1.2/modules/organization.js"></script>
+<script src="lib/highcharts-8.1.2/modules/solid-gauge.js"></script>
+<script src="lib/highcharts-8.1.2/modules/streamgraph.js"></script>
+<script src="lib/highcharts-8.1.2/modules/sunburst.js"></script>
+<script src="lib/highcharts-8.1.2/modules/vector.js"></script>
+<script src="lib/highcharts-8.1.2/modules/wordcloud.js"></script>
+<script src="lib/highcharts-8.1.2/modules/xrange.js"></script>
+<script src="lib/highcharts-8.1.2/modules/tilemap.js"></script>
+<script src="lib/highcharts-8.1.2/modules/venn.js"></script>
+<script src="lib/highcharts-8.1.2/modules/gantt.js"></script>
+<script src="lib/highcharts-8.1.2/modules/timeline.js"></script>
+<script src="lib/highcharts-8.1.2/modules/parallel-coordinates.js"></script>
+<script src="lib/highcharts-8.1.2/modules/bullet.js"></script>
+<script src="lib/highcharts-8.1.2/modules/coloraxis.js"></script>
+<script src="lib/highcharts-8.1.2/modules/dumbbell.js"></script>
+<script src="lib/highcharts-8.1.2/modules/lollipop.js"></script>
+<script src="lib/highcharts-8.1.2/modules/series-label.js"></script>
+<script src="lib/highcharts-8.1.2/plugins/motion.js"></script>
+<script src="lib/highcharts-8.1.2/custom/reset.js"></script>
+<script src="lib/highcharts-8.1.2/modules/boost.js"></script>
+<script src="lib/highchart-binding-0.8.2/highchart.js"></script>
+
+</head>
+<body>
+<div id="htmlwidget_container">
+  <div id="htmlwidget-0f62d7a1a678ffdb359b" style="width:100%;height:500px;" class="highchart html-widget"></div>
+</div>
+<script type="application/json" data-for="htmlwidget-0f62d7a1a678ffdb359b">{"x":{"hc_opts":{"chart":{"reflow":true},"title":{"text":"/r/ProstateCancer People in posts"},"yAxis":{"title":{"text":"Proportion of posts"},"type":"linear","opposite":false,"labels":{"format":"{value}"}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0,"showInLegend":true},"treemap":{"layoutAlgorithm":"squarified"},"scatter":{"marker":{"symbol":"circle"}}},"series":[{"name":"< 50","data":[{"Person":"None","Less_than_50":"< 50","count":189.833333333333,"freq":0.804946996466431,"freq_round":0.805,"count_round":190,"y":0.804946996466431,"name":"None"},{"Person":"Father","Less_than_50":"< 50","count":20.5,"freq":0.0869257950530035,"freq_round":0.087,"count_round":20,"y":0.0869257950530035,"name":"Father"},{"Person":"Brother","Less_than_50":"< 50","count":10.25,"freq":0.0434628975265018,"freq_round":0.043,"count_round":10,"y":0.0434628975265018,"name":"Brother"},{"Person":"Husband","Less_than_50":"< 50","count":7.75,"freq":0.0328621908127208,"freq_round":0.033,"count_round":8,"y":0.0328621908127208,"name":"Husband"},{"Person":"Grandfather","Less_than_50":"< 50","count":3.5,"freq":0.0148409893992933,"freq_round":0.015,"count_round":4,"y":0.0148409893992933,"name":"Grandfather"},{"Person":"Son","Less_than_50":"< 50","count":2,"freq":0.00848056537102473,"freq_round":0.008,"count_round":2,"y":0.00848056537102473,"name":"Son"},{"Person":"Uncle","Less_than_50":"< 50","count":2,"freq":0.00848056537102473,"freq_round":0.008,"count_round":2,"y":0.00848056537102473,"name":"Uncle"}],"type":"column"},{"name":">= 50","data":[{"Person":"None","Less_than_50":">= 50","count":255.666666666667,"freq":0.676068752754517,"freq_round":0.676,"count_round":256,"y":0.676068752754517,"name":"None"},{"Person":"Father","Less_than_50":">= 50","count":98.5833333333333,"freq":0.260687527545174,"freq_round":0.261,"count_round":99,"y":0.260687527545174,"name":"Father"},{"Person":"Husband","Less_than_50":">= 50","count":13.5,"freq":0.0356985456148083,"freq_round":0.036,"count_round":14,"y":0.0356985456148083,"name":"Husband"},{"Person":"Brother","Less_than_50":">= 50","count":6.83333333333333,"freq":0.0180696342000881,"freq_round":0.018,"count_round":7,"y":0.0180696342000881,"name":"Brother"},{"Person":"Grandfather","Less_than_50":">= 50","count":2.5,"freq":0.00661084178052005,"freq_round":0.007,"count_round":2,"y":0.00661084178052005,"name":"Grandfather"},{"Person":"Uncle","Less_than_50":">= 50","count":0.833333333333333,"freq":0.00220361392684002,"freq_round":0.002,"count_round":1,"y":0.00220361392684002,"name":"Uncle"},{"Person":"Son","Less_than_50":">= 50","count":0.25,"freq":0.000661084178052005,"freq_round":0.001,"count_round":0,"y":0.000661084178052005,"name":"Son"}],"type":"column"},{"name":"None","data":[{"Person":"None","Less_than_50":"None","count":5522.5,"freq":0.892597381606595,"freq_round":0.893,"count_round":5522,"y":0.892597381606595,"name":"None"},{"Person":"Father","Less_than_50":"None","count":467,"freq":0.0754808469371262,"freq_round":0.075,"count_round":467,"y":0.0754808469371262,"name":"Father"},{"Person":"Husband","Less_than_50":"None","count":100,"freq":0.0161629222563439,"freq_round":0.016,"count_round":100,"y":0.0161629222563439,"name":"Husband"},{"Person":"Brother","Less_than_50":"None","count":46.3333333333333,"freq":0.00748882064543936,"freq_round":0.007,"count_round":46,"y":0.00748882064543936,"name":"Brother"},{"Person":"Grandfather","Less_than_50":"None","count":23,"freq":0.00371747211895911,"freq_round":0.004,"count_round":23,"y":0.00371747211895911,"name":"Grandfather"},{"Person":"Uncle","Less_than_50":"None","count":14.1666666666667,"freq":0.00228974731964873,"freq_round":0.002,"count_round":14,"y":0.00228974731964873,"name":"Uncle"},{"Person":"Son","Less_than_50":"None","count":14,"freq":0.00226280911588815,"freq_round":0.002,"count_round":14,"y":0.00226280911588815,"name":"Son"}],"type":"column"}],"xAxis":{"type":"category","title":{"text":"Person in post"},"opposite":false,"labels":{"format":"{value}"}},"tooltip":{"pointFormat":"Proportion: {point.freq_round} <br/> Occurances: {point.count_round} <br/>"}},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+<script type="application/htmlwidget-sizing" data-for="htmlwidget-0f62d7a1a678ffdb359b">{"viewer":{"width":"100%","height":350,"padding":0,"fill":true},"browser":{"width":"100%","height":500,"padding":0,"fill":true}}</script>
+</body>
+</html>

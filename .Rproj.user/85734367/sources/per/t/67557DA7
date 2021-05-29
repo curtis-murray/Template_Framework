@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1612313771345.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2184718377",
+    "id" : "67557DA7",
+    "lastKnownWriteTime" : 1607508073,
+    "last_content_update" : 1607508073,
+    "path" : "~/Dropbox/PhD/Prostate/R/prostate_analyse_topics_clean.R",
+    "project_path" : "R/prostate_analyse_topics_clean.R",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

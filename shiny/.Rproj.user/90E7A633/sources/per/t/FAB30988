@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1619740546995.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "500592994",
+    "id" : "FAB30988",
+    "lastKnownWriteTime" : 1619734393,
+    "last_content_update" : 1619734393,
+    "path" : "~/Dropbox/PhD/Prostate/shiny/app.two.R",
+    "project_path" : "app.two.R",
+    "properties" : {
+        "cursorPosition" : "13,14",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

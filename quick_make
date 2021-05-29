@@ -1,0 +1,9 @@
+paper_plots: prostate_analyse_tm
+	R CMD BATCH R/paper_plots.R
+analyse_tm: prostate_py_topic_models
+	R CMD BATCH R/prostate_analyse_topics_clean.R
+prostate_py_topic_models: clean_posts
+	jupyter nbconvert --to=python Python/prostate_hSBM.ipynb
+	python Python/prostate_hSBM.py
+clean_posts:
+	R CMD BATCH R/prostate_topic_model.R
