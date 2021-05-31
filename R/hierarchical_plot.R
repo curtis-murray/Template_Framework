@@ -32,16 +32,16 @@ clean_posts <- read_csv("data/clean_posts.csv")
 hSBM_input <- read_csv("data/clean_posts.csv")
 
 word_probs <- hSBM_input %>% 
-	unnest_tokens(word, Content) %>% 
+	unnest_tokens(word, content) %>% 
 	group_by(word) %>% 
 	summarise(count = n()) %>% 
 	ungroup() %>% 
 	mutate(prop = count/sum(count))
 
-keep_words <- hSBM_input %>% unnest_tokens(word, Content) %>% 
+keep_words <- hSBM_input %>% unnest_tokens(word, content) %>% 
 	group_by(word) %>% 
 	summarise(count = n()) %>% 
-	top_n(600, count) %>% 
+	top_n(2000, count) %>% 
 	arrange(-count) %>% 
 	pull(word)
 
@@ -50,6 +50,8 @@ tidy_topics_all <- list.files(path = "data/Topic_Model/Clean/", pattern = "tidy_
 	mutate(posts = map(value, read_csv)) %>% 
 	mutate(level = str_extract(value, "\\d")) %>% 
 	select(posts, level) 
+
+max_level <- tidy_topics_all$level %>% as.numeric %>% max
 
 tidy_topic_docs_all <- list.files(path = "data/Topic_Model/Clean", pattern = "tidy_topics_docs", full.names = T, include.dirs=T, all.files =T) %>% 
 	as_tibble() %>% 
@@ -69,51 +71,42 @@ words_wide <- tidy_topics_all %>%
 	filter(word %in% keep_words) %>% 
 	pivot_wider(names_from = level, values_from = topic, names_prefix = "L") %>% 
 	group_by(word, word_ID) %>% 
-	summarise_at(c("p", "L0", "L1", "L2", "L3"), ~max(.x, na.rm = t)) %>% 
-	mutate(
-		L3 = paste("L3_", L3, sep = ""),
-		L2 = paste("L2_", L2, sep = ""),
-		L1 = paste("L1_", L1, sep = ""),
-		L0 = paste("L0_", L0, sep = "")
-	) %>% 
+	summarise_at(c("p", paste("L", 0:max_level, sep = "")), ~max(.x, na.rm = t)) %>% 
 	ungroup()
 
-l4_3 <- words_wide %>%
-	group_by(L3) %>%
-	summarise() %>%
-	mutate(from = "L4_") %>%
-	rename(to = L3)
+for(i in 0:max_level){
+	col <- words_wide[,4]
+	col_name <- names(col)
+	
+	words_wide <- words_wide[,-4] %>% bind_cols(col %>% mutate_at(1, ~paste(col_name, .x, sep ="_")))
+}
 
-l3_2 <- words_wide %>%
-	group_by(L2, L3) %>%
-	summarise() %>%
-	rename(from = L3, to = L2) %>%
-	ungroup()
-
-
-l2_1 <- words_wide %>% 
-	group_by(L1, L2) %>% 
-	summarise() %>% 
-	rename(from = L2, to = L1) %>% 
-	ungroup() 
-
-l1_0 <- words_wide %>% 
-	group_by(L0, L1) %>% 
-	summarise() %>% 
-	rename(from = L1, to = L0) %>% 
-	ungroup() 
-
-l0_w <- words_wide %>% 
-	group_by(word, L0) %>% 
-	summarise() %>% 
-	rename(from = L0, to = word) %>% 
-	ungroup()
-
-edges <- l4_3 %>% 
-	bind_rows(l3_2) %>% 
-	bind_rows(l2_1) %>% 
-	bind_rows(l1_0) %>% 
-	bind_rows(l0_w)
+for(i in (max_level+1):0){
+	print(i)
+	if(i == max_level+1){
+		edges <- words_wide %>%
+			group_by_at(i-1+4) %>%
+			summarise() %>%
+			ungroup() %>% 
+			mutate(from = paste("L",i+1,"_", sep = "")) %>%
+			rename(to = 1)
+	}else if(i == 0){
+		tmp <- words_wide %>% 
+			group_by_at(c(1, 4)) %>% 
+			summarise() %>% 
+			ungroup() %>% 
+			rename(from = 2, to = 1) 
+		edges <- edges %>% bind_rows(tmp)
+	}else{
+		tmp <- words_wide %>%
+			group_by_at(c(i-1+4, i+4)) %>%
+			summarise() %>%
+			ungroup() %>% 
+			rename(from = 2, to = 1) 
+		edges <- edges %>% bind_rows(tmp)
+		
+	}
+}
 
 nodes <- tibble(
 	label = unique(c(edges$to, edges$from))
@@ -150,20 +143,18 @@ edges_id_full <- edges_id %>%
 	mutate(edge.width = ifelse(label == "", 0, 1))
 
 root <- edges_id_full$from[1]
-	
-
-
-# visNetwork(nodes = nodes_named, edges = edges_id, height = "2000px", width = "100%") %>% 
-#   #visNodes(color = "white") %>% 
+# 
+# visNetwork(nodes = nodes_named, edges = edges_id, height = "2000px", width = "100%") %>%
+#   #visNodes(color = "white") %>%
 #   visEdges(hidden = TRUE)
 
 
 my_graph <- graph_from_data_frame(edges_id_full %>% 
-																		filter(from != root) %>% 
+																		#filter(from != root) %>% 
 																		select(-label), 
 																	directed = TRUE, 
 																	vertices = nodes_named %>% 
-																		filter(id != root) %>% 
+																		#filter(id != root) %>% 
 																		mutate(font.size = font.size) %>% 
 																		mutate(size = size) %>% 
 																		mutate(font.alpha = 0.5))
@@ -175,50 +166,49 @@ saveWidget(visIgraph(my_graph,
 										 root=edges_id_full$from[2], 
 										 idToLabel = F) %>% 
 					 	visOptions(highlightNearest = list(enabled = T, hover = T), 
-					 						 nodesIdSelection = T,height = 1440), 
+					 						 nodesIdSelection = T,height = 1440, width = 2560), 
 					 file = "Figures/topic_network.html")
 
-coords <- layout_as_tree(my_graph, circular = F, root = edges_id_full$from[1])
-
-plot(my_graph, 
-		 layout = coords, 
-		 idToLabel = F)
-
-visIgraph(my_graph, idToLabel = F, type = "full") %>% 
-	visIgraphLayout(layout = "layout.norm", layoutMatrix = cbind(-coords[,2], coords[,1]), type = "full") %>% 
-	visPhysics()
-
-visNetwork(nodes_named, edges_id, width = "100%") %>% 
-	visHierarchicalLayout(direction = "LR", levelSeparation = 500)
-#plot(my_graph, layout = layout_as_tree(my_graph, circular = TRUE, root = edges_id_full$from[1]))
-
-visNetwork(nodes = nodes_named, edges = edges_id_full %>% select(-label) , width = "100%", height = "2000px")
-
-visIgraph(my_graph, 
-					layout="layout_as_tree", 
-					circular = TRUE, 
-					root=edges_id_full$from[1], 
-					idToLabel = F
-)
-
-visNetwork(nodes = tmp$nodes, edges = tmp$edges, height = "500px")
 
 
-my_node_id <- nodes_named %>% 
-	filter(label == " legal ") %>% 
-	pull(id)
 
-parent_node_id <- edges_id %>% 
-	filter(to %in% my_node_id) %>% 
-	pull(from)
 
-parents_node_ids <- edges_id %>% 
-	filter(to %in% parents_node_ids) %>% 
-	pull(from)
-
-edges_id %>% 
-	filter(
-		from %in% parent_node_id
-	) %>% 
-	left_join(nodes_named, by = c("to" = "id"))
+# 
+# coords <- layout_as_tree(my_graph, circular = F, root = edges_id_full$from[1])
+# 
+# plot(my_graph, 
+# 		 layout = coords, 
+# 		 idToLabel = F)
+# 
+# visIgraph(my_graph, idToLabel = F, type = "full") %>% 
+# 	visIgraphLayout(layout = "layout.norm", layoutMatrix = cbind(-coords[,2], coords[,1]), type = "full") %>% 
+# 	visPhysics()
+# 
+# visNetwork(nodes_named, edges_id, width = "100%") %>% 
+# 	visHierarchicalLayout(direction = "LR", levelSeparation = 500)
+# #plot(my_graph, layout = layout_as_tree(my_graph, circular = TRUE, root = edges_id_full$from[1]))
+# 
+# visNetwork(nodes = nodes_named, edges = edges_id_full %>% select(-label) , width = "100%", height = "2000px")
+# 
+# visIgraph(my_graph, 
+# 					layout="layout_as_tree", 
+# 					circular = TRUE, 
+# 					root=edges_id_full$from[1], 
+# 					idToLabel = F
+# )
+# 
+# visNetwork(nodes = tmp$nodes, edges = tmp$edges, height = "500px")
+# 
+# 
+# my_node_id <- nodes_named %>% 
+# 	filter(label == " legal ") %>% 
+# 	pull(id)
+# 
+# parent_node_id <- edges_id %>% 
+# 	filter(to %in% my_node_id) %>% 
+# 	pull(from)
+# 
+# parents_node_ids <- edges_id %>% 
+# 	filter(to %in% parents_node_ids) %>% 
+# 	pull(from)
 
